@@ -57,6 +57,10 @@ public class BoxListener implements Listener {
             return;
         }
         Box box = found.get();
+        if (box.prizes().isEmpty()) {
+            player.sendMessage("§cEsta caixa ainda não tem prémios.");
+            return;
+        }
         List<Integer> intervals = registry.intervals();
         int n = intervals.size();
         ItemStack winner;
@@ -93,14 +97,16 @@ public class BoxListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (event.getInventory().getHolder() instanceof Roulette) {
+        if (event.getInventory().getHolder() instanceof Roulette
+                || event.getInventory().getHolder() instanceof InfoMenu) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
-        if (event.getInventory().getHolder() instanceof Roulette) {
+        if (event.getInventory().getHolder() instanceof Roulette
+                || event.getInventory().getHolder() instanceof InfoMenu) {
             event.setCancelled(true);
         }
     }

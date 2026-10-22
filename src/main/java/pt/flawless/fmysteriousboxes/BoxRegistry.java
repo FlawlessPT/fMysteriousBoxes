@@ -65,8 +65,7 @@ public class BoxRegistry {
                 }
             }
             if (prizes.isEmpty()) {
-                log.warning("caixa '" + key + "' ignorada: sem prémios válidos");
-                continue;
+                log.warning("caixa '" + key + "' sem prémios válidos: não abre até ter conteúdo");
             }
             if (boxes.containsKey(id)) {
                 log.warning("caixa '" + key + "' ignorada: id repetido");
@@ -78,6 +77,10 @@ public class BoxRegistry {
 
     public Optional<Box> find(String id) {
         return id == null ? Optional.empty() : Optional.ofNullable(boxes.get(id.toLowerCase(Locale.ROOT)));
+    }
+
+    public void add(Box box) {
+        boxes.put(box.id(), box);
     }
 
     public Optional<Box> findByItem(String itemId) {
