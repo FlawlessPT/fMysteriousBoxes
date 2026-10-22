@@ -29,7 +29,14 @@ public record Box(String id, String itemId, String title, List<Prize> prizes) {
 
         /** Nome para mensagens quando o item não tem nome próprio. */
         public String label() {
-            return material != null ? material.name().toLowerCase(Locale.ROOT).replace('_', ' ') : itemId;
+            if (material == null) {
+                return itemId;
+            }
+            StringBuilder name = new StringBuilder();
+            for (String word : material.name().toLowerCase(Locale.ROOT).split("_")) {
+                name.append(name.length() > 0 ? " " : "").append(Character.toUpperCase(word.charAt(0))).append(word.substring(1));
+            }
+            return name.toString();
         }
     }
 
