@@ -65,9 +65,11 @@ public class BoxListener implements Listener {
         List<Integer> intervals = registry.intervals();
         int n = intervals.size();
         ItemStack winner;
+        String winnerId;
         List<ItemStack> strip;
         try {
             Prize won = box.pick(random);
+            winnerId = won.itemId();
             winner = box.create(won, items);
             strip = buildStrip(box, winner, n, random);
         } catch (IllegalStateException e) {
@@ -82,7 +84,7 @@ public class BoxListener implements Listener {
         } else {
             player.setItemInHand(null);
         }
-        Roulette roulette = new Roulette(plugin, player, box, winner, strip, intervals, registry.finalPause(),
+        Roulette roulette = new Roulette(plugin, player, box, winner, winnerId, strip, intervals, registry.finalPause(),
                 () -> active.remove(uuid));
         active.put(uuid, roulette);
         roulette.start();

@@ -26,6 +26,7 @@ public class Roulette implements InventoryHolder {
     private final Plugin plugin;
     private final Player player;
     private final ItemStack prize;
+    private final String prizeId;
     private final List<ItemStack> strip;
     private final List<Integer> intervals;
     private final int finalPause;
@@ -35,11 +36,12 @@ public class Roulette implements InventoryHolder {
     private BukkitTask task;
     private boolean done;
 
-    public Roulette(Plugin plugin, Player player, Box box, ItemStack prize, List<ItemStack> strip,
+    public Roulette(Plugin plugin, Player player, Box box, ItemStack prize, String prizeId, List<ItemStack> strip,
                     List<Integer> intervals, int finalPause, Runnable onDone) {
         this.plugin = plugin;
         this.player = player;
         this.prize = prize;
+        this.prizeId = prizeId;
         this.strip = strip;
         this.intervals = intervals;
         this.finalPause = finalPause;
@@ -123,10 +125,11 @@ public class Roulette implements InventoryHolder {
         return true;
     }
 
-    private static String name(ItemStack item) {
+    /** Nome do item; sem nome próprio usa o id do fCustomItems em vez do material. */
+    private String name(ItemStack item) {
         if (item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
             return item.getItemMeta().getDisplayName();
         }
-        return item.getType().name().toLowerCase().replace('_', ' ');
+        return prizeId;
     }
 }
