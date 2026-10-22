@@ -1,8 +1,10 @@
 package pt.flawless.fmysteriousboxes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import pt.flawless.fapi.items.ItemsApi;
 
 /** Uma caixa configurada: o item que se segura e os prémios possíveis. */
@@ -10,6 +12,17 @@ public record Box(String id, String itemId, String title, List<Prize> prizes) {
 
     /** Prémio de uma caixa; {@code amount} nulo = quantidade do próprio item. */
     public record Prize(String itemId, int weight, Integer amount) {
+    }
+
+    /** Acrescenta uma linha (precedida de linha vazia) à lore do item. */
+    public static ItemStack addLore(ItemStack item, String line) {
+        ItemMeta meta = item.getItemMeta();
+        List<String> lore = meta.hasLore() ? new ArrayList<>(meta.getLore()) : new ArrayList<>();
+        lore.add("");
+        lore.add(line);
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /** Sorteia um prémio por peso; a soma dos pesos tem de ser > 0 (garantido pelo {@link BoxRegistry}). */

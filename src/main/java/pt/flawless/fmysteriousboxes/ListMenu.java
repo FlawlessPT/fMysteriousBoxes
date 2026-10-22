@@ -36,7 +36,7 @@ public class ListMenu implements InventoryHolder {
             if (item == null) {
                 continue;
             }
-            inventory.setItem(slot, item);
+            inventory.setItem(slot, Box.addLore(item, "§7Clica com o botão direito para previsualizar"));
             boxes.put(slot++, box);
         }
         hidden = registry.all().size() - boxes.size();

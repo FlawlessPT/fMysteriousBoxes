@@ -164,6 +164,7 @@ public class BoxCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage("§cO item da caixa '" + box.id() + "' não existe no fCustomItems.");
             return;
         }
+        Box.addLore(stack, "§7Clica com o botão direito para abrir");
         // addItem devolve o que não coube; larga-se aos pés do jogador para não perder caixas
         target.getInventory().addItem(stack).values()
                 .forEach(rest -> target.getWorld().dropItemNaturally(target.getLocation(), rest));
