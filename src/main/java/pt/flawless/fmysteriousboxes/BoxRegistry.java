@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import pt.flawless.fapi.items.ItemsApi;
 import pt.flawless.fmysteriousboxes.Box.Prize;
 
@@ -90,8 +92,14 @@ public class BoxRegistry {
                 log.warning("caixa '" + key + "' ignorada: id repetido");
                 continue;
             }
-            boxes.put(id, new Box(id, itemId, s.getString("titulo", id), List.copyOf(prizes)));
+            boxes.put(id, new Box(id, itemId, s.getString("titulo", defaultTitle(items, itemId, id)), List.copyOf(prizes)));
         }
+    }
+
+    /** Título por omissão: o nome do custom item; sem nome, o id da caixa. */
+    static String defaultTitle(ItemsApi items, String itemId, String boxId) {
+        return items.create(itemId).map(ItemStack::getItemMeta)
+                .filter(ItemMeta::hasDisplayName).map(ItemMeta::getDisplayName).orElse(boxId);
     }
 
     public Optional<Box> find(String id) {

@@ -64,10 +64,9 @@ public class BoxCommand implements CommandExecutor, TabCompleter {
         }
         FileConfiguration cfg = plugin.getConfig();
         cfg.set("caixas." + id + ".item", itemId);
-        cfg.set("caixas." + id + ".titulo", id);
         cfg.set("caixas." + id + ".premios", new ArrayList<>());
         plugin.saveConfig();
-        registry.add(new Box(id, itemId, id, List.of()));
+        registry.add(new Box(id, itemId, BoxRegistry.defaultTitle(items, itemId, id), List.of()));
         sender.sendMessage("§aCaixa '" + id + "' criada com o item '" + itemId
                 + "'. Define os prémios em plugins/fMysteriousBoxes/config.yml e faz /reload.");
     }
