@@ -8,6 +8,7 @@ import pt.flawless.fapi.items.ItemsUnavailableException;
 public class FMysteriousBoxes extends JavaPlugin {
 
     private BoxRegistry registry;
+    private BoxListener listener;
 
     @Override
     public void onEnable() {
@@ -22,6 +23,15 @@ public class FMysteriousBoxes extends JavaPlugin {
         }
         registry = new BoxRegistry(getConfig(), items, getLogger());
         getLogger().info(registry.all().size() + " caixa(s) carregada(s)");
+        listener = new BoxListener(this, registry, items);
+        getServer().getPluginManager().registerEvents(listener, this);
+    }
+
+    @Override
+    public void onDisable() {
+        if (listener != null) {
+            listener.abortAll();
+        }
     }
 
     public BoxRegistry registry() {
