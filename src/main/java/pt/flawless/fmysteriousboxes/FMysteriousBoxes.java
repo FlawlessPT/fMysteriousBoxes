@@ -25,6 +25,9 @@ public class FMysteriousBoxes extends JavaPlugin {
         getLogger().info(registry.all().size() + " caixa(s) carregada(s)");
         listener = new BoxListener(this, registry, items);
         getServer().getPluginManager().registerEvents(listener, this);
+        BoxCommand command = new BoxCommand(registry, items);
+        getCommand("caixa").setExecutor(command);
+        getCommand("caixa").setTabCompleter(command);
     }
 
     @Override
