@@ -22,6 +22,7 @@ public class BoxCommand implements CommandExecutor, TabCompleter {
 
     private static final String USE_CREATE = "/caixa criar <caixa>";
     private static final String USE_INFO = "/caixa info <caixa>";
+    private static final String USE_LIST = "/caixa list";
 
     private final Plugin plugin;
     private final BoxRegistry registry;
@@ -71,6 +72,22 @@ public class BoxCommand implements CommandExecutor, TabCompleter {
                 + "'. Define os prémios em plugins/fMysteriousBoxes/config.yml e faz /reload.");
     }
 
+    private void list(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("§cSó um jogador pode usar este comando.");
+            return;
+        }
+        if (args.length != 1) {
+            sender.sendMessage("§cUso: " + USE_LIST);
+            return;
+        }
+        ListMenu menu = new ListMenu(registry, items);
+        player.openInventory(menu.getInventory());
+        if (menu.hidden() > 0) {
+            sender.sendMessage("§e" + menu.hidden() + " caixa(s) não cabem no menu.");
+        }
+    }
+
     private void info(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage("§cSó um jogador pode usar este comando.");
@@ -103,11 +120,13 @@ public class BoxCommand implements CommandExecutor, TabCompleter {
                 sender.sendMessage("§e" + USE_GIVE + " §7- Dá caixas a um jogador");
                 sender.sendMessage("§e" + USE_CREATE + " §7- Cria uma caixa com o item da mão");
                 sender.sendMessage("§e" + USE_INFO + " §7- Mostra os prémios de uma caixa");
+                sender.sendMessage("§e" + USE_LIST + " §7- Mostra todas as caixas");
                 sender.sendMessage("§e/caixa help §7- Mostra esta lista");
             }
             case "dar", "give" -> give(sender, args);
             case "criar", "create" -> create(sender, args);
             case "info" -> info(sender, args);
+            case "list", "lista" -> list(sender, args);
             default -> sender.sendMessage("§cSubcomando desconhecido. Usa /caixa help para ver os comandos disponíveis.");
         }
         return true;
@@ -160,7 +179,7 @@ public class BoxCommand implements CommandExecutor, TabCompleter {
         List<String> out = new ArrayList<>();
         String last = args[args.length - 1].toLowerCase(Locale.ROOT);
         if (args.length == 1) {
-            out.addAll(List.of("dar", "criar", "info", "help"));
+            out.addAll(List.of("dar", "criar", "info", "list", "help"));
         } else if (args.length == 2 && isGive(args[0])) {
             Bukkit.getOnlinePlayers().forEach(p -> out.add(p.getName()));
         } else if (args.length == 3 && isGive(args[0])) {

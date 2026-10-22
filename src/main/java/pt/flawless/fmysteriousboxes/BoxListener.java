@@ -12,6 +12,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -98,15 +99,28 @@ public class BoxListener implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         if (event.getInventory().getHolder() instanceof Roulette
-                || event.getInventory().getHolder() instanceof InfoMenu) {
+                || event.getInventory().getHolder() instanceof InfoMenu
+                || event.getInventory().getHolder() instanceof ListMenu) {
             event.setCancelled(true);
+        }
+        if (event.getInventory().getHolder() instanceof ListMenu menu
+                && event.getClick() == ClickType.RIGHT
+                && event.getRawSlot() < event.getInventory().getSize()
+                && event.getWhoClicked() instanceof Player player) {
+            Box box = menu.boxAt(event.getRawSlot());
+            if (box != null) {
+                // abrir noutro tick: não se troca de inventário a meio do evento de clique
+                plugin.getServer().getScheduler().runTask(plugin,
+                        () -> player.openInventory(new InfoMenu(box, items).getInventory()));
+            }
         }
     }
 
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
         if (event.getInventory().getHolder() instanceof Roulette
-                || event.getInventory().getHolder() instanceof InfoMenu) {
+                || event.getInventory().getHolder() instanceof InfoMenu
+                || event.getInventory().getHolder() instanceof ListMenu) {
             event.setCancelled(true);
         }
     }

@@ -10,5 +10,5 @@ commands:
     permission: fmysteriousboxes.admin
 permissions:
   fmysteriousboxes.admin:
-    description: Usar /caixa (subcomandos dar, criar e info)
+    description: Usar /caixa (subcomandos dar, criar, info e list)
     default: op
