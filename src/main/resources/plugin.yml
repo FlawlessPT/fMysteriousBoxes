@@ -1,0 +1,14 @@
+name: fMysteriousBoxes
+main: pt.flawless.fmysteriousboxes.FMysteriousBoxes
+version: 1.0
+description: Caixas misteriosas com roleta de abertura
+depend: [fAPI, fCustomItems]
+commands:
+  caixa:
+    description: Gere caixas misteriosas
+    usage: /<command> help
+    permission: fmysteriousboxes.admin
+permissions:
+  fmysteriousboxes.admin:
+    description: Usar /caixa (subcomando dar)
+    default: op
