@@ -1,0 +1,12 @@
+animacao:
+  # ticks entre deslocações; o nº de entradas = nº de deslocações
+  intervalos: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 7, 8, 10]
+  # ticks com o prémio parado antes de fechar
+  pausa-final: 30
+caixas:
+  lendaria:
+    item: caixa_lendaria        # id no fCustomItems
+    titulo: "&6Caixa Lendária"  # título do inventário (corta a 32)
+    premios:
+      - { item: espada_divina, peso: 5 }
+      - { item: maca_dourada, peso: 60, quantidade: 2 }   # quantidade opcional, por omissão a do item
