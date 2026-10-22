@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -45,6 +46,13 @@ public class BoxListener implements Listener {
         // outro plugin (ex.: fAuth antes do login) negou o uso do item; isCancelled() não serve no 1.8 (RIGHT_CLICK_AIR vem cancelado)
         if (event.useItemInHand() == Event.Result.DENY) {
             return;
+        }
+        // placas (lojas do fShop) tratam o clique; a caixa na mão não pode abrir nem cancelar
+        if (event.getClickedBlock() != null) {
+            Material clicked = event.getClickedBlock().getType();
+            if (clicked == Material.WALL_SIGN || clicked == Material.SIGN_POST) {
+                return;
+            }
         }
         Player player = event.getPlayer();
         ItemStack hand = player.getItemInHand();
