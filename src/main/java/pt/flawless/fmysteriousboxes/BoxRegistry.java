@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import pt.flawless.fapi.items.ItemsApi;
@@ -52,16 +53,34 @@ public class BoxRegistry {
             List<Prize> prizes = new ArrayList<>();
             for (Map<?, ?> p : s.getMapList("premios")) {
                 Object item = p.get("item");
+                Object materialName = p.get("material");
+                Object data = p.get("data");
                 Object weight = p.get("peso");
                 Object amount = p.get("quantidade");
-                if (item == null || !items.exists(item.toString())) {
+                Object label = item != null ? item : materialName;
+                Material material = null;
+                if (item != null && materialName != null) {
+                    log.warning("caixa '" + key + "': prémio '" + item + "' ignorado (usa item ou material, não os dois)");
+                    continue;
+                }
+                if (materialName != null) {
+                    material = Material.matchMaterial(materialName.toString());
+                }
+                if (item == null && materialName == null) {
+                    log.warning("caixa '" + key + "': prémio ignorado (falta item ou material)");
+                } else if (item != null && !items.exists(item.toString())) {
                     log.warning("caixa '" + key + "': prémio '" + item + "' ignorado (item inexistente)");
+                } else if (materialName != null && (material == null || material == Material.AIR)) {
+                    log.warning("caixa '" + key + "': prémio '" + materialName + "' ignorado (material inexistente)");
+                } else if (data != null && (item != null || !(data instanceof Integer d && d >= 0 && d <= Short.MAX_VALUE))) {
+                    log.warning("caixa '" + key + "': prémio '" + label + "' ignorado (data inválida ou usada com item)");
                 } else if (!(weight instanceof Integer w) || w < 1) {
-                    log.warning("caixa '" + key + "': prémio '" + item + "' ignorado (peso inválido)");
+                    log.warning("caixa '" + key + "': prémio '" + label + "' ignorado (peso inválido)");
                 } else if (amount != null && !(amount instanceof Integer a && a >= 1)) {
-                    log.warning("caixa '" + key + "': prémio '" + item + "' ignorado (quantidade inválida)");
+                    log.warning("caixa '" + key + "': prémio '" + label + "' ignorado (quantidade inválida)");
                 } else {
-                    prizes.add(new Prize(item.toString(), w, (Integer) amount));
+                    prizes.add(new Prize(item != null ? item.toString() : null, material,
+                            data != null ? ((Integer) data).shortValue() : 0, w, (Integer) amount));
                 }
             }
             if (prizes.isEmpty()) {

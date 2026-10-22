@@ -10,3 +10,4 @@ caixas:
     premios:
       - { item: espada_divina, peso: 5 }
       - { item: maca_dourada, peso: 60, quantidade: 2 }   # quantidade opcional, por omissão a do item
+      - { material: DIAMOND, peso: 20, quantidade: 3 }    # item normal: material (e data opcional) em vez de item

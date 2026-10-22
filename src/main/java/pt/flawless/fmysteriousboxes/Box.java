@@ -2,7 +2,10 @@ package pt.flawless.fmysteriousboxes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.Random;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import pt.flawless.fapi.items.ItemsApi;
@@ -10,8 +13,24 @@ import pt.flawless.fapi.items.ItemsApi;
 /** Uma caixa configurada: o item que se segura e os prémios possíveis. */
 public record Box(String id, String itemId, String title, List<Prize> prizes) {
 
-    /** Prémio de uma caixa; {@code amount} nulo = quantidade do próprio item. */
-    public record Prize(String itemId, int weight, Integer amount) {
+    /**
+     * Prémio de uma caixa: um item do fCustomItems ({@code itemId}) ou um item normal ({@code material} + {@code data}).
+     * {@code amount} nulo = quantidade do próprio item (1 nos itens normais).
+     */
+    public record Prize(String itemId, Material material, short data, int weight, Integer amount) {
+
+        /** Cria o item do prémio; vazio se o item do fCustomItems já não existir. */
+        public Optional<ItemStack> create(ItemsApi items) {
+            if (material != null) {
+                return Optional.of(new ItemStack(material, amount != null ? amount : 1, data));
+            }
+            return amount != null ? items.create(itemId, amount) : items.create(itemId);
+        }
+
+        /** Nome para mensagens quando o item não tem nome próprio. */
+        public String label() {
+            return material != null ? material.name().toLowerCase(Locale.ROOT).replace('_', ' ') : itemId;
+        }
     }
 
     /** Acrescenta uma linha (precedida de linha vazia) à lore do item. */
@@ -40,7 +59,6 @@ public record Box(String id, String itemId, String title, List<Prize> prizes) {
 
     /** Cria o item do prémio, com a quantidade do prémio se existir. */
     public ItemStack create(Prize prize, ItemsApi items) {
-        return (prize.amount() != null ? items.create(prize.itemId(), prize.amount()) : items.create(prize.itemId()))
-                .orElseThrow(() -> new IllegalStateException("item inexistente: " + prize.itemId()));
+        return prize.create(items).orElseThrow(() -> new IllegalStateException("item inexistente: " + prize.label()));
     }
 }

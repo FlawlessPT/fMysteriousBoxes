@@ -41,8 +41,7 @@ public class InfoMenu implements InventoryHolder {
             if (shown == MAX_PRIZES) {
                 break;
             }
-            ItemStack item = (prize.amount() != null ? items.create(prize.itemId(), prize.amount())
-                    : items.create(prize.itemId())).orElse(null);
+            ItemStack item = prize.create(items).orElse(null);
             if (item == null) {
                 continue;
             }

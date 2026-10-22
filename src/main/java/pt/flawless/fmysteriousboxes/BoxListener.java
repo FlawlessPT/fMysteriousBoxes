@@ -77,7 +77,7 @@ public class BoxListener implements Listener {
         List<ItemStack> strip;
         try {
             Prize won = box.pick(random);
-            winnerId = won.itemId();
+            winnerId = won.label();
             winner = box.create(won, items);
             strip = buildStrip(box, winner, n, random);
         } catch (IllegalStateException e) {
