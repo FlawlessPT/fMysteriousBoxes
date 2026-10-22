@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -64,8 +65,8 @@ public class BoxCommand implements CommandExecutor, TabCompleter {
             } catch (NumberFormatException e) {
                 qty = 0;
             }
-            if (qty < 1) {
-                sender.sendMessage("§cQuantidade inválida: tem de ser um número inteiro maior que 0.");
+            if (qty < 1 || qty > 2304) {
+                sender.sendMessage("§cQuantidade inválida: tem de ser um número inteiro entre 1 e 2304.");
                 return;
             }
         }
@@ -77,9 +78,10 @@ public class BoxCommand implements CommandExecutor, TabCompleter {
         // addItem devolve o que não coube; larga-se aos pés do jogador para não perder caixas
         target.getInventory().addItem(stack).values()
                 .forEach(rest -> target.getWorld().dropItemNaturally(target.getLocation(), rest));
-        sender.sendMessage("§aDeste " + qty + "x " + box.title() + "§a a " + target.getName() + ".");
+        String title = ChatColor.translateAlternateColorCodes('&', box.title());
+        sender.sendMessage("§aDeste " + qty + "x " + title + "§a a " + target.getName() + ".");
         if (sender != target) {
-            target.sendMessage("§aRecebeste " + qty + "x " + box.title() + "§a.");
+            target.sendMessage("§aRecebeste " + qty + "x " + title + "§a.");
         }
     }
 

@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -38,6 +39,10 @@ public class BoxListener implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
+        // outro plugin (ex.: fAuth antes do login) negou o uso do item; isCancelled() não serve no 1.8 (RIGHT_CLICK_AIR vem cancelado)
+        if (event.useItemInHand() == Event.Result.DENY) {
             return;
         }
         Player player = event.getPlayer();

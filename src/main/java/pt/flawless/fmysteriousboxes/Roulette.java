@@ -109,9 +109,14 @@ public class Roulette implements InventoryHolder {
         if (task != null) {
             task.cancel();
         }
-        Map<Integer, ItemStack> left = player.getInventory().addItem(prize.clone());
-        for (ItemStack rest : left.values()) {
-            player.getWorld().dropItem(player.getLocation(), rest);
+        if (player.isDead()) {
+            // o inventário de um jogador morto já foi limpo e não é copiado ao reaparecer
+            player.getWorld().dropItemNaturally(player.getLocation(), prize.clone());
+        } else {
+            Map<Integer, ItemStack> left = player.getInventory().addItem(prize.clone());
+            for (ItemStack rest : left.values()) {
+                player.getWorld().dropItem(player.getLocation(), rest);
+            }
         }
         player.sendMessage("§aGanhaste: §f" + prize.getAmount() + "x " + name(prize));
         onDone.run();
