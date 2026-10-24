@@ -1,6 +1,7 @@
 name: fMysteriousBoxes
 main: pt.flawless.fmysteriousboxes.FMysteriousBoxes
 version: 1.0
+api-version: '1.21'
 description: Caixas misteriosas com roleta de abertura
 depend: [fAPI, fCustomItems]
 commands:

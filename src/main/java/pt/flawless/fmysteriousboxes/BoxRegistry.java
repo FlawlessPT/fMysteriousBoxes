@@ -74,15 +74,15 @@ public class BoxRegistry {
                     log.warning("caixa '" + key + "': prémio '" + item + "' ignorado (item inexistente)");
                 } else if (materialName != null && (material == null || material == Material.AIR)) {
                     log.warning("caixa '" + key + "': prémio '" + materialName + "' ignorado (material inexistente)");
-                } else if (data != null && (item != null || !(data instanceof Integer d && d >= 0 && d <= Short.MAX_VALUE))) {
-                    log.warning("caixa '" + key + "': prémio '" + label + "' ignorado (data inválida ou usada com item)");
+                } else if (data != null) {
+                    log.warning("caixa '" + key + "': prémio '" + label + "': 'data' já não existe, usa o material com cor (ex.: RED_WOOL)");
                 } else if (!(weight instanceof Integer w) || w < 1) {
                     log.warning("caixa '" + key + "': prémio '" + label + "' ignorado (peso inválido)");
                 } else if (amount != null && !(amount instanceof Integer a && a >= 1)) {
                     log.warning("caixa '" + key + "': prémio '" + label + "' ignorado (quantidade inválida)");
                 } else {
                     prizes.add(new Prize(item != null ? item.toString() : null, material,
-                            data != null ? ((Integer) data).shortValue() : 0, w, (Integer) amount));
+                            (short) 0, w, (Integer) amount));
                 }
             }
             if (prizes.isEmpty()) {

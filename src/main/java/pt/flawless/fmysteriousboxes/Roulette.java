@@ -49,8 +49,8 @@ public class Roulette implements InventoryHolder {
 
         this.inventory = new FInventory(this, FInventorySize.SIZE_27,
                 ChatColor.translateAlternateColorCodes('&', box.title())).getInventory();
-        ItemStack gray = new FItemStack(Material.STAINED_GLASS_PANE, 1, " ").setDurability((short) 7).createItem();
-        ItemStack marker = new FItemStack(Material.STAINED_GLASS_PANE, 1, " ").setDurability((short) 4).createItem();
+        ItemStack gray = new FItemStack(Material.GRAY_STAINED_GLASS_PANE, 1, " ").createItem();
+        ItemStack marker = new FItemStack(Material.YELLOW_STAINED_GLASS_PANE, 1, " ").createItem();
         for (int i = 0; i < inventory.getSize(); i++) {
             inventory.setItem(i, gray);
         }
@@ -81,7 +81,7 @@ public class Roulette implements InventoryHolder {
                 return;
             }
             showWindow(step + 1);
-            FSound.sendSound(player, Sound.CLICK);
+            FSound.sendSound(player, Sound.UI_BUTTON_CLICK);
             if (step + 1 < intervals.size()) {
                 schedule(step + 1);
             } else {

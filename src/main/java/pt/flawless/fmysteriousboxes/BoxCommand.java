@@ -52,7 +52,7 @@ public class BoxCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage("§cJá existe uma caixa '" + id + "'.");
             return;
         }
-        String itemId = items.idOf(player.getItemInHand()).orElse(null);
+        String itemId = items.idOf(player.getInventory().getItemInMainHand()).orElse(null);
         if (itemId == null) {
             sender.sendMessage("§cSegura na mão um item do fCustomItems (cria-o antes com /customitem criar).");
             return;

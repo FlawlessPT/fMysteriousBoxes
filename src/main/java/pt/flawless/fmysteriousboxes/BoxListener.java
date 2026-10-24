@@ -40,6 +40,7 @@ public class BoxListener implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
+        if (event.getHand() != org.bukkit.inventory.EquipmentSlot.HAND) return;
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
@@ -50,12 +51,12 @@ public class BoxListener implements Listener {
         // placas (lojas do fShop) tratam o clique; a caixa na mão não pode abrir nem cancelar
         if (event.getClickedBlock() != null) {
             Material clicked = event.getClickedBlock().getType();
-            if (clicked == Material.WALL_SIGN || clicked == Material.SIGN_POST) {
+            if (org.bukkit.Tag.ALL_SIGNS.isTagged(clicked)) {
                 return;
             }
         }
         Player player = event.getPlayer();
-        ItemStack hand = player.getItemInHand();
+        ItemStack hand = player.getInventory().getItemInMainHand();
         Optional<Box> found = items.idOf(hand).flatMap(registry::findByItem);
         if (found.isEmpty()) {
             return;
@@ -88,9 +89,9 @@ public class BoxListener implements Listener {
         // só consome 1 depois de o prémio e a faixa estarem criados
         if (hand.getAmount() > 1) {
             hand.setAmount(hand.getAmount() - 1);
-            player.setItemInHand(hand);
+            player.getInventory().setItemInMainHand(hand);
         } else {
-            player.setItemInHand(null);
+            player.getInventory().setItemInMainHand(null);
         }
         Roulette roulette = new Roulette(plugin, player, box, winner, winnerId, strip, intervals, registry.finalPause(),
                 () -> active.remove(uuid));

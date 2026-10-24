@@ -23,7 +23,7 @@ public class ListMenu implements InventoryHolder {
 
     public ListMenu(BoxRegistry registry, ItemsApi items) {
         inventory = new FInventory(this, FInventorySize.SIZE_27, "§8Caixas").getInventory();
-        ItemStack gray = new FItemStack(Material.STAINED_GLASS_PANE, 1, " ").setDurability((short) 7).createItem();
+        ItemStack gray = new FItemStack(Material.GRAY_STAINED_GLASS_PANE, 1, " ").createItem();
         for (int i = 0; i < inventory.getSize(); i++) {
             inventory.setItem(i, gray);
         }

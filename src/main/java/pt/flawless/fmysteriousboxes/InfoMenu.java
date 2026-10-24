@@ -26,7 +26,7 @@ public class InfoMenu implements InventoryHolder {
     public InfoMenu(Box box, ItemsApi items) {
         inventory = new FInventory(this, FInventorySize.SIZE_54,
                 ChatColor.translateAlternateColorCodes('&', box.title())).getInventory();
-        ItemStack gray = new FItemStack(Material.STAINED_GLASS_PANE, 1, " ").setDurability((short) 7).createItem();
+        ItemStack gray = new FItemStack(Material.GRAY_STAINED_GLASS_PANE, 1, " ").createItem();
         for (int i = 0; i < 54; i++) {
             if (i < 9 || i >= 45 || i % 9 == 0 || i % 9 == 8) {
                 inventory.setItem(i, gray);
